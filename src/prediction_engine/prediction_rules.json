@@ -1,0 +1,85 @@
+{
+  "prediction_rules": {
+    "imminent_failure": {
+      "conditions": [
+        {
+          "metric": "status_check_failures",
+          "severity": "critical",
+          "count": 3,
+          "time_window_hours": 24
+        },
+        {
+          "metric": "cpu_steal",
+          "severity": "critical",
+          "trend": "increasing",
+          "duration_hours": 6
+        }
+      ],
+      "confidence": "high",
+      "window": "24 hours"
+    },
+    "performance_risk": {
+      "conditions": [
+        {
+          "metric": "memory_saturation",
+          "severity": "warning",
+          "trend": "increasing",
+          "duration_hours": 12
+        },
+        {
+          "metric": "disk_usage",
+          "severity": "warning",
+          "trend": "increasing",
+          "duration_hours": 12
+        }
+      ],
+      "confidence": "medium",
+      "window": "24-72 hours"
+    },
+    "hardware_issue": {
+      "conditions": [
+        {
+          "metric": "cpu_steal",
+          "severity": "critical",
+          "trend": "increasing"
+        },
+        {
+          "metric": "iowait",
+          "severity": "critical",
+          "has_spikes": true
+        }
+      ],
+      "confidence": "high",
+      "window": "24 hours"
+    },
+    "early_warning": {
+      "conditions": [
+        {
+          "metric": "cpu_credit_balance",
+          "severity": "warning",
+          "trend": "decreasing"
+        },
+        {
+          "metric": "memory_saturation",
+          "severity": "warning"
+        }
+      ],
+      "confidence": "low",
+      "window": "72+ hours"
+    }
+  },
+  "scoring_weights": {
+    "status_check_failures": 1.5,
+    "cpu_steal": 1.2,
+    "iowait": 1.2,
+    "memory_saturation": 1.0,
+    "disk_usage": 1.0,
+    "cpu_credit_balance": 0.8
+  },
+  "thresholds": {
+    "high_confidence": 0.8,
+    "medium_confidence": 0.6,
+    "low_confidence": 0.4
+  }
+}
+

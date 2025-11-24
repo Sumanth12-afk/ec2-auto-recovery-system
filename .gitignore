@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfplan
+.terraformrc
+
+# Backend configuration (may contain sensitive bucket names)
+infra/terraform/backend/terraform.tfvars
+infra/terraform/backend/backend-config.tfvars
+infra/terraform/backend/.terraform/
+infra/terraform/backend/*.tfstate
+infra/terraform/backend/*.tfstate.backup
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lambda packages
+lambda_package.zip
+*.zip
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+

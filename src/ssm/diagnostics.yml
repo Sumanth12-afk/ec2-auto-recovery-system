@@ -1,0 +1,39 @@
+schemaVersion: '2.2'
+description: Run diagnostics on EC2 instance
+mainSteps:
+  - name: collectSystemInfo
+    action: aws:runShellScript
+    inputs:
+      runCommand:
+        - |
+          echo "=== System Information ==="
+          uname -a
+          echo ""
+          echo "=== CPU Information ==="
+          lscpu
+          echo ""
+          echo "=== Memory Information ==="
+          free -h
+          echo ""
+          echo "=== Disk Information ==="
+          df -h
+          echo ""
+          echo "=== Network Information ==="
+          ip addr show
+          echo ""
+          echo "=== Recent System Logs ==="
+          journalctl -n 50 --no-pager || tail -50 /var/log/syslog
+      timeoutSeconds: '300'
+  - name: checkCloudWatchAgent
+    action: aws:runShellScript
+    inputs:
+      runCommand:
+        - |
+          if command -v amazon-cloudwatch-agent &> /dev/null; then
+            echo "CloudWatch Agent is installed"
+            systemctl status amazon-cloudwatch-agent || service amazon-cloudwatch-agent status
+          else
+            echo "CloudWatch Agent is not installed"
+          fi
+      timeoutSeconds: '60'
+

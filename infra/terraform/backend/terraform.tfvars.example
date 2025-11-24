@@ -1,0 +1,15 @@
+# Terraform Backend Bucket Configuration Example
+# Copy this to terraform.tfvars and customize
+# This file is used for creating the S3 bucket
+
+# AWS Region
+aws_region = "us-east-1"
+
+# S3 Bucket Configuration (for bucket creation)
+bucket_name       = "your-terraform-state-bucket-name"
+enable_versioning = true
+enable_encryption = true
+
+# Note: Backend configuration is in backend-config.tfvars
+# Copy backend-config.tfvars.example to backend-config.tfvars and update values
+

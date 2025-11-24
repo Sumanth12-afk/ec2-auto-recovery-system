@@ -1,0 +1,30 @@
+schemaVersion: '2.2'
+description: Restart application services on EC2 instance
+parameters:
+  serviceName:
+    type: String
+    description: Name of the service to restart
+    default: "application"
+mainSteps:
+  - name: restartService
+    action: aws:runShellScript
+    inputs:
+      runCommand:
+        - |
+          # Try systemd first
+          if systemctl list-units --type=service | grep -q "{{serviceName}}"; then
+            systemctl restart {{serviceName}}
+            systemctl status {{serviceName}}
+          # Try init.d
+          elif [ -f /etc/init.d/{{serviceName}} ]; then
+            service {{serviceName}} restart
+            service {{serviceName}} status
+          # Try Docker
+          elif command -v docker &> /dev/null; then
+            docker restart $(docker ps -q --filter "name={{serviceName}}")
+          else
+            echo "Service {{serviceName}} not found"
+            exit 1
+          fi
+      timeoutSeconds: '300'
+

@@ -1,0 +1,47 @@
+schemaVersion: '2.2'
+description: Verify instance health after recovery
+parameters:
+  healthEndpoint:
+    type: String
+    description: Health check endpoint URL
+    default: "http://localhost:8080/health"
+mainSteps:
+  - name: checkHealthEndpoint
+    action: aws:runShellScript
+    inputs:
+      runCommand:
+        - |
+          # Check if endpoint is accessible
+          response=$(curl -s -o /dev/null -w "%{http_code}" {{healthEndpoint}} || echo "000")
+          if [ "$response" = "200" ]; then
+            echo "Health check passed: HTTP $response"
+            exit 0
+          else
+            echo "Health check failed: HTTP $response"
+            exit 1
+          fi
+      timeoutSeconds: '60'
+  - name: checkSystemStatus
+    action: aws:runShellScript
+    inputs:
+      runCommand:
+        - |
+          # Check system resources
+          cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)
+          mem_usage=$(free | grep Mem | awk '{printf "%.0f", $3/$2 * 100}')
+          disk_usage=$(df -h / | awk 'NR==2 {print $5}' | cut -d'%' -f1)
+          
+          echo "CPU Usage: ${cpu_usage}%"
+          echo "Memory Usage: ${mem_usage}%"
+          echo "Disk Usage: ${disk_usage}%"
+          
+          # Check if values are reasonable
+          if [ "$cpu_usage" -lt 100 ] && [ "$mem_usage" -lt 95 ] && [ "$disk_usage" -lt 95 ]; then
+            echo "System resources are healthy"
+            exit 0
+          else
+            echo "System resources are unhealthy"
+            exit 1
+          fi
+      timeoutSeconds: '60'
+

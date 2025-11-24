@@ -1,0 +1,15 @@
+{
+  "cpu_steal_warning": 5.0,
+  "cpu_steal_critical": 10.0,
+  "iowait_warning": 20.0,
+  "iowait_critical": 40.0,
+  "memory_saturation_warning": 85.0,
+  "memory_saturation_critical": 95.0,
+  "disk_usage_warning": 80.0,
+  "disk_usage_critical": 90.0,
+  "network_drop_warning": 10,
+  "cpu_credit_balance_warning": 100.0,
+  "disk_queue_depth_warning": 10.0,
+  "status_check_failure_count": 3
+}
+

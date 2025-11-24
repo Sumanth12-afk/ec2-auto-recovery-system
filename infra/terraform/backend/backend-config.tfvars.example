@@ -1,0 +1,17 @@
+# Backend Configuration for Main Terraform
+# Copy this to backend-config.tfvars and customize
+# This file is used when initializing main Terraform:
+# terraform init -backend-config=backend/backend-config.tfvars
+# 
+# Values should match bucket_name and aws_region from terraform.tfvars
+
+bucket = "your-terraform-state-bucket-name"  # Must match bucket_name in terraform.tfvars
+key    = "ec2-auto-recovery/terraform.tfstate"
+region = "us-east-1"  # Must match aws_region in terraform.tfvars
+
+# Optional: Enable server-side encryption
+# encrypt = true
+
+# Optional: Use DynamoDB table for state locking
+# dynamodb_table = "terraform-state-lock"
+

@@ -1,0 +1,21 @@
+{
+  "default_recovery_policy": {
+    "enabled": true,
+    "auto_restart": true,
+    "host_migration": false,
+    "cross_az_failover": false,
+    "ebs_repair": false,
+    "app_level_recovery": true,
+    "quarantine_mode": false,
+    "notification_channels": ["sns"]
+  },
+  "per_instance_overrides": {
+    "example-instance-id": {
+      "enabled": true,
+      "auto_restart": true,
+      "app_level_recovery": false,
+      "notification_channels": ["sns", "slack"]
+    }
+  }
+}
+
