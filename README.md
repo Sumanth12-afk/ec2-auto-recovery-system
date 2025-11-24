@@ -167,6 +167,49 @@ lambda_client.invoke(
 )
 ```
 
+## Health Checking
+
+The system uses **AWS Systems Manager (SSM) documents** (YAML files) to perform health checks and recovery actions on EC2 instances.
+
+### SSM Documents
+
+Three SSM documents are deployed to handle different aspects of health checking and recovery:
+
+1. **`verify_health.yml`** - Health Verification
+   - Checks application health endpoint (HTTP status)
+   - Validates system resources (CPU, memory, disk usage)
+   - Used after recovery actions to confirm instance is healthy
+   - Configurable health endpoint URL (default: `http://localhost:8080/health`)
+
+2. **`restart_services.yml`** - Service Restart Automation
+   - Restarts application services via systemd, init.d, or Docker
+   - Used for app-level recovery when services fail
+   - Supports multiple service management systems
+
+3. **`diagnostics.yml`** - System Diagnostics
+   - Collects system information (CPU, memory, disk, network)
+   - Gathers recent system logs
+   - Used for troubleshooting and diagnostics
+
+### How Health Checking Works
+
+1. **Real-Time Monitoring**: Health Monitor Lambda checks EC2 status checks via CloudWatch
+2. **Application Health**: If configured, checks application health endpoint via HTTP
+3. **Post-Recovery Verification**: After recovery actions, SSM `verify_health` document is executed to confirm instance is healthy
+4. **Resource Validation**: Verifies CPU, memory, and disk usage are within acceptable thresholds
+
+### Configuration
+
+Set health endpoint in instance configuration:
+
+```python
+table.put_item(Item={
+    'instance_id': 'i-1234567890abcdef0',
+    'health_endpoint': 'http://localhost:8080/health',  # Your app health endpoint
+    'app_level_recovery': True  # Enable SSM-based recovery
+})
+```
+
 ## Monitoring
 
 ### CloudWatch Logs
