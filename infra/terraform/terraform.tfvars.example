@@ -16,7 +16,7 @@ sns_topic_name = "ec2-auto-recovery-notifications"
 enable_sns = false  # Set to true if you want SNS notifications
 
 # Notification webhooks (at least one recommended)
-slack_webhook_url = "https://hooks.slack.com/services/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"
+slack_webhook_url = "https://hooks.slack.com-------------------"
 slack_channel = "#team-collab"
 slack_username = "Sumanth Nallandhigal"
 
